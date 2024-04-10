@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +9,50 @@
 <body>
 
 <?php
-$errors = [];
+echo '<pre>' . print_r($_POST, true) . '</pre>';
 
+$errors = [];
+?>
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-6">
+        <form action="" method="post" class="pt-5 d-flex flex-column" novalidate>
+                <div class="row mb-3">
+                    <label class="col-4 pt-3" for="username">Username</label>
+                    <div class="col-8">
+                        <input class="mt-2 w-100" type="text" name="username" id="username" placeholder="Username">
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <label class="col-4 pt-3" for="email">Email</label>
+                    <div class="col-8">
+                        <input class="mt-2 w-100" type="email" name="email" id="email" placeholder="example@email.com" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <label class="col-4 pt-3" for="age">Età</label>
+                    <div class="col-8">
+                        <input class="mt-2 w-25" type="number" name="age" id="age">
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <label class="col-4 pt-3" for="password">Password</label>
+                    <div class="col-8">
+                        <input type="password" name="password" id="password" placeholder="A secure password" class="form-control mt-2 w-100">
+                    </div>
+                </div>
+        
+                <button type="submit" class="btn btn-primary w-25 mt-4">Invia</button>
+            </form>
+        </div>
+        <div class="col-6">
+        <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['username'];
     $email = $_POST['email'];
@@ -56,27 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
-<div class="container mt-4">
-    <form action="" method="post" class="pt-5" novalidate>
-        <label for="username">Username</label>
-        <input class="mt-2" type="text" name="username" id="username" placeholder="Username">
-        <br>
-
-        <label for="email">Email</label>
-        <input class="mt-2" type="email" name="email" id="email" placeholder="example@email.com" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
-        <br>
-
-        <label for="age">Età</label>
-        <input class="mt-2" type="number" name="age" id="age">
-        <br>
-
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" placeholder="A secure password" class="form-control w-25 mt-2">
-        <br>
-
-        <button type="submit" class="btn btn-primary">Invia</button>
-    </form>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
