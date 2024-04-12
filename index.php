@@ -1,3 +1,27 @@
+<?php
+$host = 'localhost';
+$db   = 'ifoa_firstdatabase';
+$user = 'root';
+$pass = '';
+
+$dsn = "mysql:host=$host;dbname=$db";
+
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+$errors = [];
+
+// Inizializza la connessione al database
+$pdo = new PDO($dsn, $user, $pass, $options);
+
+// SELECT DI TUTTE LE RIGHE
+$stmt = $pdo->query('SELECT * FROM listautenti');
+
+?>
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
@@ -8,18 +32,14 @@
 </head>
 <body>
 
-<?php
-echo '<pre>' . print_r($_POST, true) . '</pre>';
-
-$errors = [];
-?>
-
-
+    <div class="text-end pe-5 me-5">
+        <a class="btn btn-secondary mt-5" href="./backOffice.php">BackOffice</a>
+    </div>
 
 <div class="container mt-4">
     <div class="row">
         <div class="col-6">
-        <form action="" method="post" class="pt-5 d-flex flex-column" novalidate>
+            <form action="" method="post" class="pt-5 d-flex flex-column" novalidate>
                 <div class="row mb-3">
                     <label class="col-4 pt-3" for="username">Username</label>
                     <div class="col-8">
@@ -52,52 +72,53 @@ $errors = [];
             </form>
         </div>
         <div class="col-6">
-        <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = $_POST['username'];
-    $email = $_POST['email'];
-    $age = $_POST['age'];
-    $password = $_POST['password'];
+            <?php
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $name = $_POST['username'];
+                $email = $_POST['email'];
+                $age = $_POST['age'];
+                $password = $_POST['password'];
 
-    // Validazione dei dati
-    if (empty($name)) {
-        $errors['username'] = 'Inserisci un username';
-    }
+                // Validazione dei dati
+                if (empty($name)) {
+                    $errors['username'] = 'Inserisci un username';
+                }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Email non valida';
-    }
-    
-    if ($age < 18) {
-        $errors['age'] = 'Devi avere almeno 18 anni per registrarti';
-    }
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errors['email'] = 'Email non valida';
+                }
+                
+                if ($age < 18) {
+                    $errors['age'] = 'Devi avere almeno 18 anni per registrarti';
+                }
 
-    if (strlen($password) < 8) {
-        $errors['password'] = 'Password troppo corta';
-    }
+                if (strlen($password) < 8) {
+                    $errors['password'] = 'Password troppo corta';
+                }
 
-    // Se ci sono errori, visualizza il form con gli errori
-    if (!empty($errors)) {
-        echo '<div class="container mt-4 pt-5">';
-        echo '<div class="alert alert-danger" role="alert">';
-        echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
-        echo '<ul>';
-        foreach ($errors as $error) {
-            echo '<li>' . $error . '</li>';
-        }
-        echo '</ul>';
-        echo '</div>';
-        echo '</div>';
-    } else {
-        // Altrimenti, procedi con l'elaborazione dei dati
-        // Salvataggio dei dati nel database, invio di email, ecc.
-
-        // Reindirizzamento alla pagina di successo
-        header('Location: success.php');
-        exit;
-    }
-}
-?>
+                // Se ci sono errori, visualizza il form con gli errori
+                if (!empty($errors)) {
+                    echo '<div class="container mt-4 pt-5">';
+                    echo '<div class="alert alert-danger" role="alert">';
+                    echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
+                    echo '<ul>';
+                    foreach ($errors as $error) {
+                        echo '<li>' . $error . '</li>';
+                    }
+                    echo '</ul>';
+                    echo '</div>';
+                    echo '</div>';
+                } else {
+                    // Inserisci i dati nel database
+                    $stmt = $pdo->prepare("INSERT INTO listautenti (username, email, age, password) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$name, $email, $age, $password]);
+                    
+                    // Reindirizza alla pagina di successo
+                    header('Location: success.php');
+                    exit;
+                }
+            }
+            ?>
         </div>
     </div>
 </div>

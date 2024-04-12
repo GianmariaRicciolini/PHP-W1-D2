@@ -7,6 +7,10 @@
     <title>Success</title>
 </head>
 <body>
+<div class="d-flex justify-content-between px-5 mt-5">
+    <a class="btn btn-warning ms-5" href="./Index.php">Back</a>
+    <a class="btn btn-secondary me-5" href="./backOffice.php">BackOffice</a>
+</div>
     <h1 class="fw-bold m-5 p-5 text-center">Il form è stato ricevuto con successo!!!!</h1>
 </body>
 </html>
